@@ -31,7 +31,7 @@ def findval(name,ref):
     if isinstance(var,Var) and var.name is name:
       return var.value
     if(isinstance(var,list)):
-      return findval(name)
+      return findval(name,var)
   return None
 
 def peek_token(token_list):
@@ -145,9 +145,9 @@ def do_eval( a ):
       for d in declarations:
         var = Var(d[0], d[1])
         ref.insert(0, var)
-      print("f: ")
-      print(f)
-      
+      #print("f: ")
+      #print(f)
+      a = do_eval(f[2])
     elif op == "let*":
       print("let*")
       print( f )
@@ -164,13 +164,9 @@ def do_eval( a ):
   else:                    # id
     # look for id in table
     # return the value associated with the id
-    print("looking for an ID")
     b = findval(a,ref)
     if b is not None:
       a=b
-      print("val: ", str(b))
-    else:
-      print "Did not find value"
     return a
 
 def parseS():
