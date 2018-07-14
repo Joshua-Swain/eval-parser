@@ -1,0 +1,44 @@
+Assignment 7 Marking Scheme for the evaluator.
+==============================================
+
+Setup:
+    Create a directory `scratch'.
+    Copy all the files from `test' into this directory.
+    You can use this directory for each student.
+
+Pre-testing:
+    Copy the student's files into `scratch'
+    If code does not compile, they get 0/35 on that portion of the assignment.
+
+Things to check for before testing:
+    Look at source files and make sure the code will not destroy all your 
+    files.
+
+
+Evaluation for Parser 
+  Testing Functionality for the parser (20 / 35 marks) 
+     Run ./test.sh   It will perform 20 tests
+     The script will print out PASS or FAILED for each test.
+
+     Each test is worth 1 mark.  I.e., subtract 1 for each failed test.
+
+  Visual Code inspection for parser (15 / 35 marks)
+
+    +3 marks for overall program structure
+    +3 marks for `define' evaluation
+    +3 marks for `let' evaluation
+    +2 marks for `let*' evaluation
+    +2 marks for proper look up in referencing environment
+    +2 marks for proper scoping rules, i.e., new ref environment created 
+                 when evaluating let or let*
+
+    Deduct marks for general errors:
+    -1 for minor typos or errors
+    -2 for major errors
+
+
+Note:  If the cover page is not present, deduct 10% from the overall
+score.
+
+Note:  Be sure to leave comments when you deduct marks anywhere in the 
+       assignment, especially source code.

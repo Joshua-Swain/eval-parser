@@ -1,0 +1,4 @@
+( let ( ( x 42 ) ( y 13 ) ) 
+  ( define z 7 )
+  ( list x y z )
+)
