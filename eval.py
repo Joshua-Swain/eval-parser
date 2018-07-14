@@ -146,6 +146,7 @@ def do_eval( a ):
         ref.insert(0, var)
       for index in range(2, len(f)):
         a = do_eval(f[index])
+      ref = ref[ len(ref)-1 ]
     elif op == "let*":
       print("let*")
       print( f )
