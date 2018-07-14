@@ -22,8 +22,23 @@ class Var:
     self.name = name
     self.value = value
   def __str__(self):
-    return repr([self.name, self.value])
-  
+    return repr(self.name)
+
+def findval(name,ref):
+  for var in ref:
+    if isinstance(var,Var) and var.name is name:
+      return var.value
+    if(isinstance(var,list)):
+      return findval(name)
+  return None
+
+def peek_token(token_list):
+  return token_list[0]
+
+def remove_token(token_list):
+  token_list.pop(0)
+  return token_list
+
 def lookahead():
   global cur_token
 
@@ -117,11 +132,10 @@ def do_eval( a ):
       for b in f[1:]:
         a = a + [do_eval( b )]
     elif op == "define":
-      var = Var(f[1], f[2])
-      print(var.name)
-      print(var.value)
-      ref.insert(0, var)
-      a = var
+      var = Var(f[1], do_eval(f[2]))
+      ref.insert(0,var)
+      #print (ref[0].value)
+      a = var.name
     elif op == "let":
       print("let")
       print( f )
@@ -141,8 +155,13 @@ def do_eval( a ):
   else:                    # id
     # look for id in table
     # return the value associated with the id
+    b=findval(a,ref)
+    #b=do_eval(ref[1])
+    #print (ref)
+    #print (ref[0].value)
+    if b is not None:
+      a=b
     return a
-
 
 def parseS():
   tok = lookahead()
@@ -222,6 +241,7 @@ def atom2str( l ):
  
 def eval_result( l ):
   for a in l:
+    #print ("before eval")
     print atom2str( do_eval( a ) )
  
 try:
