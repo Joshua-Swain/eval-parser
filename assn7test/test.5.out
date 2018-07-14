@@ -1,0 +1,3 @@
+let
+['let', [['x', 42]], 'x']
+Evaluation Error while evaluating 'let'

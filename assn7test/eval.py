@@ -4,9 +4,7 @@ import sys, string, tokenize
 
 tokens = iter( sys.stdin.read().split() )
 cur_token = None
-global ref 
 ref = [] #current reference environment
-
 class ParseError(Exception):
   def __init__(self, value):
     self.value = value
@@ -93,7 +91,6 @@ def do_arith_op( op, l ):
 
 
 def do_eval( a ):
-  global ref
   if isinstance( a, list ): # list  
     if len( a ) < 1:
       raise EvalError( '( )' )
@@ -140,14 +137,8 @@ def do_eval( a ):
       #print (ref[0].value)
       a = var.name
     elif op == "let":
-      ref = [ref]
-      declarations = f[1]
-      for d in declarations:
-        var = Var(d[0], d[1])
-        ref.insert(0, var)
-      print("f: ")
-      print(f)
-      
+      print("let")
+      print( f )
     elif op == "let*":
       print("let*")
       print( f )
@@ -164,13 +155,12 @@ def do_eval( a ):
   else:                    # id
     # look for id in table
     # return the value associated with the id
-    print("looking for an ID")
-    b = findval(a,ref)
+    b=findval(a,ref)
+    #b=do_eval(ref[1])
+    #print (ref)
+    #print (ref[0].value)
     if b is not None:
       a=b
-      print("val: ", str(b))
-    else:
-      print "Did not find value"
     return a
 
 def parseS():
@@ -251,6 +241,7 @@ def atom2str( l ):
  
 def eval_result( l ):
   for a in l:
+    #print ("before eval")
     print atom2str( do_eval( a ) )
  
 try:

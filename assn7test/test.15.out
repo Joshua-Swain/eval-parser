@@ -1,0 +1,6 @@
+a
+x
+y
+let
+['let', [['x', 42], ['y', 13]], ['define', 'a', 21], ['let', [['x', 14], ['y', 6]], ['+', 'a', 'x']]]
+Evaluation Error while evaluating 'let'
