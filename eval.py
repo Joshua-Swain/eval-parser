@@ -137,7 +137,6 @@ def do_eval( a ):
     elif op == "define":
       var = Var(f[1], do_eval(f[2]))
       ref.insert(0,var)
-      #print (ref[0].value)
       a = var.name
     elif op == "let":
       ref = [ref]
@@ -145,9 +144,8 @@ def do_eval( a ):
       for d in declarations:
         var = Var(d[0], d[1])
         ref.insert(0, var)
-      #print("f: ")
-      #print(f)
-      a = do_eval(f[2])
+      for index in range(2, len(f)):
+        a = do_eval(f[index])
     elif op == "let*":
       print("let*")
       print( f )
