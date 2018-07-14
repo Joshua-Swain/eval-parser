@@ -4,7 +4,7 @@ import sys, string, tokenize
 
 tokens = iter( sys.stdin.read().split() )
 cur_token = None
-
+ref = [] #current reference environment
 class ParseError(Exception):
   def __init__(self, value):
     self.value = value
@@ -17,6 +17,13 @@ class EvalError(Exception):
   def __str__(self):
     return repr(self.value)
 
+class Var:
+  def __init__(self, name, value):
+    self.name = name
+    self.value = value
+  def __str__(self):
+    return repr([self.name, self.value])
+  
 def lookahead():
   global cur_token
 
@@ -68,7 +75,7 @@ def do_arith_op( op, l ):
   return r
 
 
-def do_eval( a, ref ):
+def do_eval( a ):
   if isinstance( a, list ): # list  
     if len( a ) < 1:
       raise EvalError( '( )' )
@@ -110,9 +117,11 @@ def do_eval( a, ref ):
       for b in f[1:]:
         a = a + [do_eval( b )]
     elif op == "define":
-      print ("define")
-      print( f[1] )
-      print( f[2] )
+      var = Var(f[1], f[2])
+      print(var.name)
+      print(var.value)
+      ref.insert(0, var)
+      a = var
     elif op == "let":
       print("let")
       print( f )
