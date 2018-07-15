@@ -4,8 +4,7 @@ import sys, string, tokenize
 
 tokens = iter( sys.stdin.read().split() )
 cur_token = None
-global ref 
-ref = [] #current reference environment
+ref = [] #reference environment
 
 class ParseError(Exception):
   def __init__(self, value):
@@ -27,15 +26,15 @@ class Var:
     return repr(self.name)
 
 def findval(name,ref):
-  if not ref or len(ref) > 0:
+  if (not ref) or (len(ref) < 1):
     return None
   else:
     for var in ref:
-      if isinstance(var,Var) and var.name is name:
+      if isinstance(var,Var) and (var.name is name):
         return var.value
       if(isinstance(var,list)):
         return findval(name,var)
-    return None
+  return None
 
 def peek_token(token_list):
   return token_list[0]
@@ -144,23 +143,31 @@ def do_eval( a ):
     elif op == "let":
       pendingVars = []
       declarations = f[1]
+      # declare variables using previous scope
       for d in declarations:
         var = Var(d[0], do_eval(d[1]))
         pendingVars = pendingVars + [var]
+      # add variables to current scope
+      ref = [ref]
       for i in range(0, len(pendingVars)):
         ref.insert(0, pendingVars[i])
+      # run code inside 'let'
       for index in range(2, len(f)):
         a = do_eval(f[index])
+      # remove 'let' variables from scope
       if len(ref) > 0:
         ref = ref[ len(ref)-1 ]        
     elif op == "let*":
+      # declare variables and add to scope immediately
       ref = [ref]
       declarations = f[1]
       for d in declarations:
         var = Var(d[0], do_eval(d[1]))
         ref.insert(0, var)
+      # run code inside 'let*'
       for index in range(2, len(f)):
         a = do_eval(f[index])
+      # remove 'let*' variables from scope
       if len(ref) > 0:
         ref = ref[ len(ref)-1 ]        
       
