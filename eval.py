@@ -27,12 +27,15 @@ class Var:
     return repr(self.name)
 
 def findval(name,ref):
-  for var in ref:
-    if isinstance(var,Var) and var.name is name:
-      return var.value
-    if(isinstance(var,list)):
-      return findval(name,var)
-  return None
+  if not ref or len(ref) > 0:
+    return None
+  else:
+    for var in ref:
+      if isinstance(var,Var) and var.name is name:
+        return var.value
+      if(isinstance(var,list)):
+        return findval(name,var)
+    return None
 
 def peek_token(token_list):
   return token_list[0]
@@ -139,17 +142,27 @@ def do_eval( a ):
       ref.insert(0,var)
       a = var.name
     elif op == "let":
+      pendingVars = []
+      declarations = f[1]
+      for d in declarations:
+        var = Var(d[0], do_eval(d[1]))
+        pendingVars = pendingVars + [var]
+      for i in range(0, len(pendingVars)):
+        ref.insert(0, pendingVars[i])
+      for index in range(2, len(f)):
+        a = do_eval(f[index])
+      if len(ref) > 0:
+        ref = ref[ len(ref)-1 ]        
+    elif op == "let*":
       ref = [ref]
       declarations = f[1]
       for d in declarations:
-        var = Var(d[0], d[1])
+        var = Var(d[0], do_eval(d[1]))
         ref.insert(0, var)
       for index in range(2, len(f)):
         a = do_eval(f[index])
-      ref = ref[ len(ref)-1 ]
-    elif op == "let*":
-      print("let*")
-      print( f )
+      if len(ref) > 0:
+        ref = ref[ len(ref)-1 ]        
       
     else:
       raise EvalError( 'unknown proc: ' + str( op ) ) 
